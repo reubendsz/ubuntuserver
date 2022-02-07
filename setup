@@ -1,0 +1,57 @@
+sudo apt update
+sudo apt install apache2
+
+Config : /etc/apache/apache2.conf
+
+#Checking your Web Server
+sudo systemctl status apache2
+
+#install ftp
+sudo apt install vsftpd
+
+# Uncomment this to enable any form of FTP write command. /etc/vsftpd.conf to enable writing of files.
+write_enable=YES
+
+#Install PHP cli
+sudo apt install php7.4-cli
+sudo apt-get install php7.4 php7.4-fpm php7.4-mysql libapache2-mod-php7.4 libapache2-mod-fcgid -y
+
+#Update post size: Edit file 
+/etc/php/7.4/apache2/php.ini
+
+New Values:
+short_open_tag = On
+post_max_size = 100M
+upload_max_filesize = 100M
+
+sudo apt update
+sudo apt install mysql-server
+
+mysql --version
+systemctl status mysql
+
+mysqld will log errors to /var/log/mysql/error.log
+
+sudo mysql_secure_installation
+CREATE USER 'dbuser'@'localhost' IDENTIFIED BY 'password';
+
+use mysql;
+SELECT User,Host,authentication_string FROM mysql.user;
+SHOW GRANTS FOR 'dbuser'@'localhost';
+
+change root password
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'newpassword';
+GRANT ALL PRIVILEGES ON experience_db TO 'dbuser'@'localhost';
+FLUSH PRIVILEGES;
+
+Re-install Mysql
+apt-get remove -y mysql-*
+apt-get purge -y mysql-*
+
+
+Remove mysql completely
+sudo systemctl stop mysql
+sudo apt purge mysql-server mysql-client mysql-common mysql-server-core-* mysql-client-core-*
+sudo rm -rf /etc/mysql /var/lib/mysql /var/log/mysql
+sudo apt autoremove
+sudo apt autoclean
